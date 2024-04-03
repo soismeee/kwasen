@@ -4,7 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BansosController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KriteriaController;
-use App\Http\Controllers\PengajuanYapiController;
+use App\Http\Controllers\PengajuanPKHController;
 use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WilayahController;
@@ -61,13 +61,13 @@ route::post('/json_pb', [BansosController::class, 'json'])->name('json_pb')->mid
 
 // user desa kelurahan
 route::get('/get_pb', [BansosController::class, 'getPenerima'])->name('get_pb')->middleware('auth');
-route::get('/pengajuan', [PengajuanYapiController::class, 'index'])->name('pengajuan')->middleware('auth');
+route::get('/pengajuan', [PengajuanPKHController::class, 'index'])->name('pengajuan')->middleware('auth');
 route::get('/search', [BansosController::class, 'search'])->name('search')->middleware('auth');
-route::post('/save', [PengajuanYapiController::class, 'store'])->name('save')->middleware('auth');
+route::post('/save', [PengajuanPKHController::class, 'store'])->name('save')->middleware('auth');
 route::patch('/update_data/{id}', [BansosController::class, 'update'])->name('update_data')->middleware('auth');
 
 route::get('/spb/{id}', [BansosController::class, 'show'])->name('spb')->middleware('auth');
 route::get('/epb/{id}/edit', [BansosController::class, 'edit'])->name('spb')->middleware('auth');
-route::post('/json_cek', [PengajuanYapiController::class, 'json'])->name('json_cek')->middleware('auth');
+route::post('/json_cek', [PengajuanPKHController::class, 'json'])->name('json_cek')->middleware('auth');
 
 route::delete('/del_p/{id}', [BansosController::class, 'destroy'])->name('del_p')->middleware('auth');

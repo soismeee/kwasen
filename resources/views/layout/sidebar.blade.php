@@ -3,7 +3,7 @@
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
-                <img src="{{ asset('assets/img/logo_dinsos.png') }}" alt="" width="20%">
+                <img src="{{ asset('assets/img/logo_pekalongankab.svg') }}" alt="" width="20%">
                 <div class="sidebar-brand-text mx-3">Bansos Yapi</div>
             </a>
 

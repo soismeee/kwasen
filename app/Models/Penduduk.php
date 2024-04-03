@@ -9,12 +9,12 @@ class Penduduk extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $guarded = ['nik'];
     
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'nik';
     public $incrementing = false;
 
     public function penerimaan_bansos(){
-        return $this->belongsTo('App\Models\PenerimaanBansos', 'id');
+        return $this->belongsTo(PenerimaanBansos::class, 'nik');
     }
 }

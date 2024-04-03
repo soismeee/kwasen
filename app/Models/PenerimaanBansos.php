@@ -15,6 +15,6 @@ class PenerimaanBansos extends Model
     public $incrementing = false;
 
     public function penduduk(){
-        return $this->belongsTo(Penduduk::class);
+        return $this->belongsTo(Penduduk::class, 'penduduk_nik');
     }
 }
