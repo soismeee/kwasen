@@ -22,7 +22,7 @@
         }
     </style>
     <h2 class='tengah'>Laporan Penerimaan bantuan</h2>
-    <P class='tengah'>Dinas Sosial Kabupaten Barang</P>
+    <P class='tengah'>Desa Kwasen Kecamatan Kesesi Kabupaten Pekalongan</P>
     <table>
         <tr>
             <th width="3%">No</th>
@@ -37,12 +37,12 @@
             @foreach ($data as $item)
                 <tr>
                     <td class="tengah">{{ $loop->iteration }}</td>
-                    <td>{{ $item->nama }}</td>
-                    <td>{{ $item->nik }}</td>
-                    <td class="tengah">{{ date('d/m/Y', strtotime($item->tanggal_lahir)) }}</td>
-                    <td>{{ $item->alamat_lengkap }}</td>
-                    <td>{{ $item->jekel }}</td>
-                    <td class="tengah">Proses</td>
+                    <td>{{ $item->penduduk->nama }}</td>
+                    <td>{{ $item->penduduk_nik }}</td>
+                    <td class="tengah">{{ date('d/m/Y', strtotime($item->penduduk->tanggal_lahir)) }}</td>
+                    <td>{{ $item->penduduk->alamat_lengkap }}</td>
+                    <td>{{ $item->penduduk->jenis_kelamin == "L" ? "Laki - laki" : "Perempuan" }}</td>
+                    <td class="tengah">{{ $item->validasi }}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -51,5 +51,5 @@
 </body>
 </html>
 <script>
-    print()
+    // print()
 </script>

@@ -30,12 +30,7 @@ class HomeController extends Controller
 
     public function getLaporan(){
         try {
-            if (request('dskl') == null) {
-                $penduduk = PenerimaanBansos::with('penduduk')->select('*')->get();   
-            } else {
-                $penduduk = PenerimaanBansos::with('penduduk')->select('*')->where('nama_desa_kelurahan', request('dskl'))->get();   
-            }
-            
+            $penduduk = PenerimaanBansos::with('penduduk')->select('*')->get();   
             return response()->json(['data' => $penduduk]);
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage]);
@@ -43,14 +38,14 @@ class HomeController extends Controller
     }
 
     public function cetakLaporan(){
-        if (request('dskl') == null) {
-            $penduduk = PenerimaanBansos::with('penduduk')->select('*')->get();   
-        } else {
-            $penduduk = PenerimaanBansos::with('penduduk')->select('*')->where('nama_desa_kelurahan', request('dskl'))->get();   
+        $penduduk = PenerimaanBansos::with('penduduk')->select('*');   
+        if(request('status' !==null)){
+            $penduduk = PenerimaanBansos::with('penduduk')->select('*')->where('validasi', request('status'));   
+
         }
         return view('laporan.cetak', [
             'title' => 'Cetak Laporan',
-            'data' => $penduduk
+            'data' => $penduduk->get()
         ]);
     }
 

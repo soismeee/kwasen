@@ -30,23 +30,8 @@ route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 route::post('/change_user', [HomeController::class, 'update'])->name('change_user')->middleware('auth');
 route::patch('/status/{id}', [AuthController::class, 'status'])->name('status')->middleware('auth');
 
-route::resource('/usr', UserController::class)->middleware('auth');
-route::post('/json_p', [UserController::class, 'json'])->name('json_p')->middleware('auth');
-
 route::resource('/periode', PeriodeController::class)->middleware('auth');
 route::post('/json_prd', [PeriodeController::class, 'json'])->middleware('auth');
-
-route::get('/wilayah', [WilayahController::class, 'index'])->middleware('auth');
-route::get('/create_kec', [WilayahController::class, 'create_kecamatan'])->middleware('auth');
-route::get('/edit_kec/{id}', [WilayahController::class, 'edit_kecamatan'])->middleware('auth');
-route::get('/list_sdkl/{id}', [WilayahController::class, 'desakelurahan'])->middleware('auth');
-route::get('/get_sdkl/{id}', [WilayahController::class, 'jsonDesakelurahan'])->middleware('auth');
-route::get('/getid_dskl/{id}', [WilayahController::class, 'getDesakelurahan'])->middleware('auth');
-route::put('/update_kec/{id}', [WilayahController::class, 'update_kecamatan'])->middleware('auth');
-route::post('/json_kec', [WilayahController::class, 'json_kec'])->middleware('auth');
-route::post('/save_dskl', [WilayahController::class, 'store_dskl'])->middleware('auth');
-route::post('/save_kec', [WilayahController::class, 'store_kecamatan'])->middleware('auth');
-route::delete('del_kec/{id}', [WilayahController::class, 'destroy_kecamatan'])->middleware('auth');
 
 route::resource('/kriteria', KriteriaController::class)->middleware('auth');
 

@@ -19,15 +19,6 @@
         <div class="card-body">
             <div class="row mb-4">
                 <div class="col-lg-6 mb-3">
-                    <label>Filter Desa/Kelurahan</label>
-                    <select class="form-control" name="desa_kelurahan" id="desa_kelurahan">
-                        <option selected disabled>Pilih desa/kelurahan</option>
-                        @foreach ($dskl as $item)
-                            <option value="{{ $item['desa_kelurahan'] }}">{{ $item['desa_kelurahan'] }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-lg-6 mb-3">
                     <label>Filter Diterima/tidak</label>
                     <select class="form-control" name="status" id="status">
                         <option value="">Pilih status</option>
@@ -74,15 +65,6 @@
         link_cetak();
     });
 
-    // fungsi delay search
-    function delay(fn, ms) {
-        let timer = 0
-        return function(...args) {
-            clearTimeout(timer)
-            timer = setTimeout(fn.bind(this, ...args), ms || 0)
-        }
-    }
-
     function loaddata(){
         $.ajax({
             url: "{{ url('get_lap') }}",
@@ -94,10 +76,9 @@
     }
 
     function link_cetak(){
-        let desa_kelurahan = $('#desa_kelurahan').val();
         let status = $('#status').val();
         let cetak = document.getElementById('cetak');
-        cetak.href = "/cetak?desa_kelurahan=" + desa_kelurahan +"&status=" + status
+        cetak.href = "/cetak?status=" + status
     }
 
     function loading(){
@@ -128,6 +109,7 @@
         } else {
             body = ''
             data.forEach((params) => {
+                let jenis_kelamin = params.penduduk.jenis_kelamin == "L" ? "Laki-laki" : "Perempuan";
                 let tanggal = params.penduduk.tanggal_lahir;
                 var hari = tanggal.substring(8,10)
                 var bulan = tanggal.substring(7,5)
@@ -139,7 +121,7 @@
                     <td>`+params.penduduk.nik+`</td>
                     <td>`+hari+`/`+bulan+`/`+tahun+`</td>
                     <td>`+params.penduduk.alamat_lengkap+`</td>
-                    <td>`+params.penduduk.jekel+`</td>
+                    <td>`+jenis_kelamin+`</td>
                     <td>`+params.validasi+`</td>
                 </tr>`
                 $('table tbody').append(body);
@@ -148,17 +130,8 @@
         }
     }
 
-    $(document).on('change', '#desa_kelurahan', function(e){
-        $.ajax({
-            url: "{{ url('get_lap') }}",
-            method: "GET",
-            dataType: 'json',
-            data: { 'dskl' : $(this).val() },
-            success: function(response){
-                ambildata(response);
-                link_cetak();
-            },
-        });
+    $('#status').on('change', function(e){
+        link_cetak();
     });
 </script>
 
