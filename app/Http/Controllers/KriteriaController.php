@@ -12,48 +12,32 @@ class KriteriaController extends Controller
     {
         return view('kriteria.index', [
             'title' => 'Kriteria',
-            'kriteria' => Kriteria::select('id','penghasilan_ortu', 'usia', 'alamat', 'status', 'kia')->first()
+            'kriteria' => Kriteria::select('id','penghasilan', 'status', 'polri_asn', 'pbl', 'dtks')->first()
         ]);
-    }
-
-
-    public function store(Request $request)
-    {
-        //
-    }
-
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
     }
 
     public function update(Request $request, $id)
     {
         try {
             $kriteria = Kriteria::findOrFail($id);
-            if ($request->simpan_perubahan == "penghasilan_ortu") {
-                $kriteria->penghasilan_ortu = $request->penghasilan_ortu;
+            if ($request->simpan_perubahan == "penghasilan") {
+                $kriteria->penghasilan = $request->penghasilan;
             }
             
-            if ($request->simpan_perubahan == "usia") {
-                $kriteria->usia = $request->usia;
-            }
-
-            if ($request->simpan_perubahan == "alamat") {
-                $kriteria->alamat = $request->alamat;
-            }
-
             if ($request->simpan_perubahan == "status") {
                 $kriteria->status = $request->status;
             }
 
-            if ($request->simpan_perubahan == "kia") {
-                $kriteria->kia = $request->kia;
+            if ($request->simpan_perubahan == "polri_asn") {
+                $kriteria->polri_asn = $request->polri_asn;
+            }
+
+            if ($request->simpan_perubahan == "pbl") {
+                $kriteria->pbl = $request->pbl;
+            }
+
+            if ($request->simpan_perubahan == "dtks") {
+                $kriteria->dtks = $request->dtks;
             }
             $kriteria->update();
             return redirect('/kriteria');

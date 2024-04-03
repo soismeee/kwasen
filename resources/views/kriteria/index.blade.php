@@ -16,38 +16,12 @@
         <div class="col-lg-4 mb-3">
             <div class="card">
                 <div class="card-body">
-                    <h4>Penghasilan orang tua</h4>
+                    <h4>Penghasilan</h4>
                     <hr />
-                    <h2 class="text-center">{{ number_format($kriteria->penghasilan_ortu,0,',','.') }}</h2>
-                    <hr />
-                    <div class="d-flex justify-content-end">
-                        <button class="btn btn-md btn-primary" id="k_po">Ubah data</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 mb-3">
-            <div class="card">
-                <div class="card-body">
-                    <h4>Usia</h4>
-                    <hr />
-                    <h2 class="text-center">{{ $kriteria->usia }} Tahun</h2>
+                    <h2 class="text-center">{{ number_format($kriteria->penghasilan,0,',','.') }}</h2>
                     <hr />
                     <div class="d-flex justify-content-end">
-                        <button class="btn btn-md btn-primary" id="k_usia">Ubah data</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 mb-3">
-            <div class="card">
-                <div class="card-body">
-                    <h4>Alamat</h4>
-                    <hr />
-                    <h2 class="text-center">{{ $kriteria->alamat }}</h2>
-                    <hr />
-                    <div class="d-flex justify-content-end">
-                        <button class="btn btn-md btn-primary" id="k_alamat">Ubah data</button>
+                        <button class="btn btn-md btn-primary" id="k_penghasilan">Ubah data</button>
                     </div>
                 </div>
             </div>
@@ -68,56 +42,104 @@
         <div class="col-lg-4 mb-3">
             <div class="card">
                 <div class="card-body">
-                    <h4>KIA</h4>
+                    <h4>Polri/ASN</h4>
                     <hr />
-                    <h2 class="text-center">{{ $kriteria->kia }}</h2>
+                    <h2 class="text-center">{{ $kriteria->polri_asn }}</h2>
                     <hr />
                     <div class="d-flex justify-content-end">
-                        <button class="btn btn-md btn-primary" id="k_kia">Ubah data</button>
+                        <button class="btn btn-md btn-primary" id="k_polri_asn">Ubah data</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Penerima Bansos Lain</h4>
+                    <hr />
+                    <h2 class="text-center">{{ $kriteria->pbl }}</h2>
+                    <hr />
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-md btn-primary" id="k_pbl">Ubah data</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4>DTKS</h4>
+                    <hr />
+                    <h2 class="text-center">{{ $kriteria->dtks }}</h2>
+                    <hr />
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-md btn-primary" id="k_dtks">Ubah data</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 @include('kriteria.modal')
 <!-- /.container-fluid -->
 @endsection
 
 @push('js')
     <script>
-        $(document).on('click', '#k_po', function(e){
+        $(document).on('click', '#k_penghasilan', function(e){
             e.preventDefault();
-            $('.form').html(`<input type="text" name="penghasilan_ortu" id="penghasilan_ortu" class="form-control" value="{{ $kriteria->penghasilan_ortu }}">`);
-            $('#simpan_perubahan').val('penghasilan_ortu');
-            $('#formModal').modal('show');
-        });
-
-        $(document).on('click', '#k_usia', function(e){
-            e.preventDefault();
-            $('.form').html(`<input type="text" name="usia" id="usia" class="form-control" value="{{ $kriteria->usia }}">`);
-            $('#simpan_perubahan').val('usia');
-            $('#formModal').modal('show');
-        });
-
-        $(document).on('click', '#k_alamat', function(e){
-            e.preventDefault();
-            $('.form').html(`<input type="text" name="alamat" id="alamat" class="form-control" value="{{ $kriteria->alamat }}">`);
-            $('#simpan_perubahan').val('alamat');
+            $('.form').html(`<input type="text" name="penghasilan" id="penghasilan" class="form-control" value="{{ $kriteria->penghasilan }}">`);
+            $('#simpan_perubahan').val('penghasilan');
             $('#formModal').modal('show');
         });
 
         $(document).on('click', '#k_status', function(e){
             e.preventDefault();
-            $('.form').html(`<input type="text" name="status" id="status" class="form-control" value="{{ $kriteria->status }}">`);
+            $('.form').html(`
+            <select name="status" id="status" class="form-control">
+                <option value="Disabilitas" {{ $kriteria->status == "Disabilitas" ? 'selected' : '' }}>Disabilitas</option>
+                <option value="Lansia" {{ $kriteria->status == "Lansia" ? 'selected' : '' }}>Lansia</option>
+                <option value="Ibu Hamil" {{ $kriteria->status == "Ibu Hamil" ? 'selected' : '' }}>Ibu Hamil</option>
+            </select>
+            `);
             $('#simpan_perubahan').val('status');
             $('#formModal').modal('show');
         });
 
-        $(document).on('click', '#k_kia', function(e){
+        $(document).on('click', '#k_polri_asn', function(e){
             e.preventDefault();
-            $('.form').html(`<input type="text" name="kia" id="kia" class="form-control" value="{{ $kriteria->kia }}">`);
-            $('#simpan_perubahan').val('kia');
+            $('.form').html(`
+            <select name="polri_asn" id="polri_asn" class="form-control">
+                <option value="Ya" {{ $kriteria->polri_asn == "Ya" ? 'selected' : '' }}>Ya</option>
+                <option value="Tidak" {{ $kriteria->polri_asn == "Tidak" ? 'selected' : '' }}>Tidak</option>
+            </select>
+            `);
+            $('#simpan_perubahan').val('polri_asn');
+            $('#formModal').modal('show');
+        });
+
+        $(document).on('click', '#k_pbl', function(e){
+            e.preventDefault();
+            $('.form').html(`
+            <select name="pbl" id="pbl" class="form-control">
+                <option value="Penerima" {{ $kriteria->pbl == "Penerima" ? 'selected' : '' }}>Penerima</option>
+                <option value="Bukan" {{ $kriteria->pbl == "Bukan" ? 'selected' : '' }}>Bukan</option>
+            </select>
+            `);
+            $('#simpan_perubahan').val('pbl');
+            $('#formModal').modal('show');
+        });
+
+        $(document).on('click', '#k_dtks', function(e){
+            e.preventDefault();
+            $('.form').html(`
+            <select name="dtks" id="dtks" class="form-control">
+                <option value="Belum" {{ $kriteria->dtks == "Belum" ? 'selected' : '' }}>Belum</option>
+                <option value="Sudah" {{ $kriteria->dtks == "Sudah" ? 'selected' : '' }}>Sudah</option>
+            </select>
+            `);
+            $('#simpan_perubahan').val('dtks');
             $('#formModal').modal('show');
         });
     </script>
