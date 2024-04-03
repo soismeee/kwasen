@@ -37,7 +37,7 @@
                             Tanggal Lahir
                         </div>
                         <div class="col-lg-10">
-                            : {{ $data->penduduk->tanggal_lahir }}
+                            : {{ date('d-m-Y', strtotime($data->penduduk->tanggal_lahir)) }}
                         </div>
                     </div>
                     <div class="row">
@@ -45,7 +45,7 @@
                             Jenis Kelamin
                         </div>
                         <div class="col-lg-10">
-                            : {{ $data->penduduk->jekel }}
+                            : {{ $data->penduduk->jenis_kelamin == "L" ? "Laki-laki" : "Perempuan" }}
                         </div>
                     </div>
                     <div class="row">
@@ -66,20 +66,24 @@
                     <h4>Data kriteria penduduk</h4>
                     <table class="table table-bordered">
                         <tr>
-                            <td width="20%">Penghasilan Ortu</td>
-                            <td width="80%">: Rp. {{ number_format($data->penghasilan_ortu,0,',','.') }}</td>
+                            <td width="20%">Penghasilan</td>
+                            <td width="80%">: Rp. {{ number_format($data->penghasilan,0,',','.') }}</td>
                         </tr>
                         <tr>
                             <td width="20%">Status</td>
                             <td width="80%">: {{ $data->status }}</td>
                         </tr>
                         <tr>
-                            <td width="20%">KIA</td>
-                            <td width="80%">: {{ $data->kia }}</td>
+                            <td width="20%">Anggota Polri/ASN</td>
+                            <td width="80%">: {{ $data->polri_asn }}</td>
                         </tr>
                         <tr>
-                            <td width="20%">Alamat</td>
-                            <td width="80%">: {{ $data->alamat }}</td>
+                            <td width="20%">Penerima Bantuan Lain</td>
+                            <td width="80%">: {{ $data->pbl }}</td>
+                        </tr>
+                        <tr>
+                            <td width="20%">DTKS</td>
+                            <td width="80%">: {{ $data->dtks }}</td>
                         </tr>
                         <tr>
                             <td width="20%"><strong>Status</strong></td>

@@ -157,7 +157,7 @@
                     "targets": "_all",
                     "defaultContent": "-",
                     "render": function(data, type, row, meta){
-                    return row.penduduk.jekel
+                    return row.penduduk.jenis_kelamin
                     }
                 },
                 {

@@ -104,6 +104,7 @@ class PengajuanPKHController extends Controller
             $bantuan->polri_asn = $request->polri_asns[$key];
             $bantuan->pbl = $request->pbls[$key];
             $bantuan->dtks = $request->dtkss[$key];
+            $bantuan->validasi = $request->validasis[$key];
             $bantuan->tanggal = date('Y-m-d');
             $bantuan->save();
         }

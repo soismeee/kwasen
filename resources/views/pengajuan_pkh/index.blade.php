@@ -259,7 +259,24 @@
         // membuat validasi nik sudah ada di tabel
         if (arrayPenduduk.filter(item => item.nik == data.nik).length > 0)
             return alert("NIK sudah ada");
+
+        let get_penghasilan = data.penghasilan;
+        let getpenghasilantreplace = get_penghasilan.replace(/[^,\d]/g, "");
         
+        let nilai_penghasilan = getpenghasilantreplace <= "{{ $kriteria->penghasilan }}" ? 1 : 0;
+        
+        let nilai_polri_asn = v_polri_asn == "{{ $kriteria->polri_asn }}" ? 1 : 0;
+        let nilai_pbl = data.pbl == "{{ $kriteria->pbl }}" ? 1 : 0;
+        let nilai_dtks = data.dtks == "{{ $kriteria->dtks }}" ? 1 : 0;
+        
+        let validasi = "Tidak";
+        let isi_validasi = "Tidak Diterima" 
+        if (nilai_penghasilan+nilai_polri_asn+nilai_pbl+nilai_dtks > 1) {
+            validasi = "Ya";   
+            isi_validasi = "Diterima" 
+        }
+
+        console.log(validasi);
         let no = arrayPenduduk.length + 1;
         let html =
             '<tr>\
@@ -285,6 +302,7 @@
                     <input type="hidden" id="polri_asns" name="polri_asns[]" value="' + data.polri_asn + '">\
                     <input type="hidden" id="pbls" name="pbls[]" value="' + data.pbl + '">\
                     <input type="hidden" id="dtkss" name="dtkss[]" value="' + data.dtks + '">\
+                    <input type="hidden" id="validasis" name="validasis[]" value="' + validasi + '">\
                 </td>\
                 <td><a data-nik="'+data.nik+'" type="button" class="action-icon remove-item"><i class="fas fa-trash"></i></a></td>\
             </tr>';

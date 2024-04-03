@@ -14,11 +14,7 @@ class BansosController extends Controller
 {
     public function getPenerima(){
         try {
-            if (auth()->user()->role == 1) {
-                $penduduk = PenerimaanBansos::with('penduduk')->select('*')->get();   
-            } else {
-                $penduduk = PenerimaanBansos::with('penduduk')->select('*')->where('user_id', auth()->user()->id)->get();   
-            }
+            $penduduk = PenerimaanBansos::with('penduduk')->select('*')->get();   
             return response()->json(['data' => $penduduk]);
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage]);
@@ -26,24 +22,17 @@ class BansosController extends Controller
     }
 
     public function search(){
-        if (auth()->user()->role == 1) {
-            $pdd = Penduduk::select('id','nama', 'nik', 'alamat_lengkap', 'tanggal_lahir', 'jekel', 'nama_desa_kelurahan')->where('nama', request('cari'))->get();
-        } else {   
-            $userdskl = UserDesaKelurahan::where('user_id', auth()->user()->id)->first();
-            $nama_dskl = $userdskl->nama_desa_kelurahan;
-            $pdd = Penduduk::select('id','nama', 'nik', 'alamat_lengkap', 'tanggal_lahir', 'jekel', 'nama_desa_kelurahan')->where('nama_desa_kelurahan', $nama_dskl)->where('nama', request('cari'))->get();
-        }
+        $pdd = Penduduk::select('id','nama', 'nik', 'alamat_lengkap', 'tanggal_lahir', 'jenis_kelamin')->where('nama', request('cari'))->get();
         
         foreach($pdd as $item){
             $id[] = $item->id;
         }
-        // dd($penduduk);
-        $penduduk = PenerimaanBansos::with('penduduk')->where('penduduk_id', $id)->get();
+        $penduduk = PenerimaanBansos::with('penduduk')->where('penduduk_nik', $id)->get();
         return response()->json(['data' => $penduduk]);
     }
 
     public function penerimaBantuan(){
-        return view('penerima_bantuan.dinas.index', [
+        return view('penerima_bantuan.index', [
             'title' => 'Daftar Penerima Bantuan',
         ]);
     }
@@ -58,56 +47,55 @@ class BansosController extends Controller
         $kriteria = Kriteria::first();
         
         $probabilitas[] = [
-            // penghasilan ortu
-            'penghasilanortu_kurang_ya' => $penghasilanortu_kurang_ya = PenerimaanBansos::where('penghasilan_ortu', '<', 1000000)->where('validasi', 'Ya')->count(), // untuk validasi yaa
-            'penghasilanortu_samadengan_ya' => $penghasilanortu_samadengan_ya = PenerimaanBansos::where('penghasilan_ortu', '=', 1000000)->where('validasi', 'Ya')->count(), // untuk validasi yaa
-            'penghasilanortu_lebih_ya' => $penghasilanortu_lebih_ya = PenerimaanBansos::where('penghasilan_ortu', '>', 1000000)->where('validasi', 'Ya')->count(), // untuk validasi yaa
-            'totalpenghasilanortu_ya' => $penghasilanortu_kurang_ya+$penghasilanortu_samadengan_ya+$penghasilanortu_lebih_ya,
+            // penghasilan
+            'penghasilan_kurang_ya' => $penghasilan_kurang_ya = PenerimaanBansos::where('penghasilan', '<', $kriteria->penghasilan)->where('validasi', 'Ya')->count(), // untuk validasi yaa
+            'penghasilan_samadengan_ya' => $penghasilan_samadengan_ya = PenerimaanBansos::where('penghasilan', '=', $kriteria->penghasilan)->where('validasi', 'Ya')->count(), // untuk validasi yaa
+            'penghasilan_lebih_ya' => $penghasilan_lebih_ya = PenerimaanBansos::where('penghasilan', '>', $kriteria->penghasilan)->where('validasi', 'Ya')->count(), // untuk validasi yaa
+            'totalpenghasilan_ya' => $penghasilan_kurang_ya+$penghasilan_samadengan_ya+$penghasilan_lebih_ya,
             
-            'penghasilanortu_kurang_tidak' => $penghasilanortu_kurang_tidak = PenerimaanBansos::where('penghasilan_ortu', '<', 1000000)->where('validasi', 'Tidak')->count(), // untuk validasi tidak
-            'penghasilanortu_samadengan_tidak' => $penghasilanortu_samadengan_tidak = PenerimaanBansos::where('penghasilan_ortu', '=', 1000000)->where('validasi', 'Tidak')->count(), // untuk validasi tidak
-            'penghasilanortu_lebih_tidak' => $penghasilanortu_lebih_tidak = PenerimaanBansos::where('penghasilan_ortu', '>', 1000000)->where('validasi', 'Tidak')->count(), // untuk validasi tidak
-            'totalpenghasilanortu_tidak' => $penghasilanortu_kurang_tidak+$penghasilanortu_samadengan_tidak+$penghasilanortu_lebih_tidak,
-
-            // usia 
-            'usiasatusdsepuluh_ya' => $usiasatusdsepuluh_ya = PenerimaanBansos::where('usia', '>', 0)->where('usia', '<=', 10)->where('validasi', 'Ya')->count(), // untuk validasi yaa
-            'usiasebelassdduapuluh_ya' => $usiasebelassdduapuluh_ya = PenerimaanBansos::where('usia', '>', 10)->where('usia', '<=', 20)->where('validasi', 'Ya')->count(), // untuk validasi yaa
-            'usiaduasatusdtigapuluh_ya' => $usiaduasatusdtigapuluh_ya = PenerimaanBansos::where('usia', '>', 20)->where('usia', '<=', 30)->where('validasi', 'Ya')->count(), // untuk validasi yaa
-            'totalusia_ya' => $usiasatusdsepuluh_ya+$usiasebelassdduapuluh_ya+$usiaduasatusdtigapuluh_ya,
-            
-            'usiasatusdsepuluh_tidak' => $usiasatusdsepuluh_tidak = PenerimaanBansos::where('usia', '>', 0)->where('usia', '<=', 10)->where('validasi', 'Tidak')->count(), // untuk validasi tidak
-            'usiasebelassdduapuluh_tidak' => $usiasebelassdduapuluh_tidak = PenerimaanBansos::where('usia', '>', 10)->where('usia', '<=', 20)->where('validasi', 'Tidak')->count(), // untuk validasi tidak
-            'usiaduasatusdtigapuluh_tidak' => $usiaduasatusdtigapuluh_tidak = PenerimaanBansos::where('usia', '>', 20)->where('usia', '<=', 30)->where('validasi', 'Tidak')->count(), // untuk validasi tidak
-            'totalusia_tidak' => $usiasatusdsepuluh_tidak+$usiasebelassdduapuluh_tidak+$usiaduasatusdtigapuluh_tidak,
+            'penghasilan_kurang_tidak' => $penghasilan_kurang_tidak = PenerimaanBansos::where('penghasilan', '<', $kriteria->penghasilan)->where('validasi', 'Tidak')->count(), // untuk validasi tidak
+            'penghasilan_samadengan_tidak' => $penghasilan_samadengan_tidak = PenerimaanBansos::where('penghasilan', '=', $kriteria->penghasilan)->where('validasi', 'Tidak')->count(), // untuk validasi tidak
+            'penghasilan_lebih_tidak' => $penghasilan_lebih_tidak = PenerimaanBansos::where('penghasilan', '>', $kriteria->penghasilan)->where('validasi', 'Tidak')->count(), // untuk validasi tidak
+            'totalpenghasilan_tidak' => $penghasilan_kurang_tidak+$penghasilan_samadengan_tidak+$penghasilan_lebih_tidak,
 
             // status
-            'statusyatim_ya' => $statusyatim_ya = PenerimaanBansos::where('status', 'Yatim')->where('validasi', 'Ya')->count(), // untuk validasi yaa
-            'statuspiatu_ya' => $statuspiatu_ya = PenerimaanBansos::where('status', 'Piatu')->where('validasi', 'Ya')->count(), // untuk validasi yaa
-            'statusyatimpiatu_ya' => $statusyatimpiatu_ya = PenerimaanBansos::where('status', 'Yatim Piatu')->where('validasi', 'Ya')->count(), // untuk validasi yaa
-            'totalstatus_ya' => $statusyatim_ya+$statuspiatu_ya+$statusyatimpiatu_ya,
+            'statusdisabilitas_ya' => $statusdisabilitas_ya = PenerimaanBansos::where('status', 'Disabilitas')->where('validasi', 'Ya')->count(), // untuk validasi yaa
+            'statuslansia_ya' => $statuslansia_ya = PenerimaanBansos::where('status', 'Lansia')->where('validasi', 'Ya')->count(), // untuk validasi yaa
+            'statusibuhamil_ya' => $statusibuhamil_ya = PenerimaanBansos::where('status', 'Ibu Hamil')->where('validasi', 'Ya')->count(), // untuk validasi yaa
+            'totalstatus_ya' => $statusdisabilitas_ya+$statuslansia_ya+$statusibuhamil_ya,
             
-            'statusyatim_tidak' => $statusyatim_tidak = PenerimaanBansos::where('status', 'Yatim')->where('validasi', 'Tidak')->count(), // untuk validasi tidak
-            'statuspiatu_tidak' => $statuspiatu_tidak = PenerimaanBansos::where('status', 'Piatu')->where('validasi', 'Tidak')->count(), // untuk validasi tidak
-            'statusyatimpiatu_tidak' => $statusyatimpiatu_tidak = PenerimaanBansos::where('status', 'Yatim Piatu')->where('validasi', 'Tidak')->count(), // untuk validasi tidak
-            'totalstatus_tidak' => $statusyatim_tidak+$statuspiatu_tidak+$statusyatimpiatu_tidak,
+            'statusdisabilitas_tidak' => $statusdisabilitas_tidak = PenerimaanBansos::where('status', 'Disabilitas')->where('validasi', 'Tidak')->count(), // untuk validasi tidak
+            'statuslansia_tidak' => $statuslansia_tidak = PenerimaanBansos::where('status', 'Lansia')->where('validasi', 'Tidak')->count(), // untuk validasi tidak
+            'statusibuhamil_tidak' => $statusibuhamil_tidak = PenerimaanBansos::where('status', 'Ibu Hamil')->where('validasi', 'Tidak')->count(), // untuk validasi tidak
+            'totalstatus_tidak' => $statusdisabilitas_tidak+$statuslansia_tidak+$statusibuhamil_tidak,
 
-            // kia
-            'kiaada_ya' => $kiaada_ya = PenerimaanBansos::where('kia', 'ya')->where('validasi', 'Ya')->count(), // untuk validasi yaa 
-            'kiatidak_ya' => $kiatidak_ya = PenerimaanBansos::where('kia', 'tidak')->where('validasi', 'Ya')->count(), // untuk validasi yaa 
-            'totalkia_ya' => $kiaada_ya+$kiatidak_ya,
+            // polriasn
+            'polriasnya_ya' => $polriasnya_ya = PenerimaanBansos::where('polri_asn', 'Ya')->where('validasi', 'Ya')->count(), // untuk validasi yaa 
+            'polriasntidak_ya' => $polriasntidak_ya = PenerimaanBansos::where('polri_asn', 'Tidak')->where('validasi', 'Ya')->count(), // untuk validasi yaa 
+            'totalpolriasn_ya' => $polriasnya_ya+$polriasntidak_ya,
             
-            'kiaada_tidak' => $kiaada_tidak = PenerimaanBansos::where('kia', 'ya')->where('validasi', 'Tidak')->count(), // untuk validasi tidak 
-            'kiatidak_tidak' => $kiatidak_tidak = PenerimaanBansos::where('kia', 'tidak')->where('validasi', 'Tidak')->count(), // untuk validasi tidak 
-            'totalkia_tidak' => $kiaada_tidak+$kiatidak_tidak,
+            'polriasnya_tidak' => $polriasnya_tidak = PenerimaanBansos::where('polri_asn', 'Ya')->where('validasi', 'Tidak')->count(), // untuk validasi tidak 
+            'polriasntidak_tidak' => $polriasntidak_tidak = PenerimaanBansos::where('polri_asn', 'Tidak')->where('validasi', 'Tidak')->count(), // untuk validasi tidak 
+            'totalpolriasn_tidak' => $polriasnya_tidak+$polriasntidak_tidak,
 
-            // alamat
-            'alamatbtg_ya' => $alamatbtg_ya = PenerimaanBansos::where('alamat', 'Batang')->where('validasi', 'Ya')->count(), // untuk validasi yaa
-            'alamatbukanbtg_ya' => $alamatbukanbtg_ya = PenerimaanBansos::where('alamat', '!==', 'Batang')->where('validasi', 'Ya')->count(), // untuk validasi yaa
-            'totalalamat_ya' => $alamatbtg_ya+$alamatbukanbtg_ya,
+            // penerima bantuan lain
+            'pblya_ya' => $pblya_ya = PenerimaanBansos::where('pbl', 'Penerima')->where('validasi', 'Ya')->count(), // untuk validasi yaa 
+            'pbltidak_ya' => $pbltidak_ya = PenerimaanBansos::where('pbl', 'Bukan')->where('validasi', 'Ya')->count(), // untuk validasi yaa 
+            'totalpbl_ya' => $pblya_ya+$pbltidak_ya,
             
-            'alamatbtg_tidak' => $alamatbtg_tidak = PenerimaanBansos::where('alamat', 'Batang')->where('validasi', 'Tidak')->count(), // untuk validasi tidak
-            'alamatbukanbtg_tidak' => $alamatbukanbtg_tidak = PenerimaanBansos::where('alamat', '!==', 'Batang')->where('validasi', 'Tidak')->count(), // untuk validasi tidak
-            'totalalamat_tidak' => $alamatbtg_tidak+$alamatbukanbtg_tidak,
+            'pblya_tidak' => $pblya_tidak = PenerimaanBansos::where('pbl', 'Penerima')->where('validasi', 'Tidak')->count(), // untuk validasi tidak 
+            'pbltidak_tidak' => $pbltidak_tidak = PenerimaanBansos::where('pbl', 'Bukan')->where('validasi', 'Tidak')->count(), // untuk validasi tidak 
+            'totalpbl_tidak' => $pblya_tidak+$pbltidak_tidak,
+
+            // DTKS
+            'dtksya_ya' => $dtksya_ya = PenerimaanBansos::where('dtks', 'Belum')->where('validasi', 'Ya')->count(), // untuk validasi yaa 
+            'dtkstidak_ya' => $dtkstidak_ya = PenerimaanBansos::where('dtks', 'Sudah')->where('validasi', 'Ya')->count(), // untuk validasi yaa 
+            'totaldtks_ya' => $dtksya_ya+$dtkstidak_ya,
+            
+            'dtksya_tidak' => $dtksya_tidak = PenerimaanBansos::where('dtks', 'Belum')->where('validasi', 'Tidak')->count(), // untuk validasi tidak 
+            'dtkstidak_tidak' => $dtkstidak_tidak = PenerimaanBansos::where('dtks', 'Sudah')->where('validasi', 'Tidak')->count(), // untuk validasi tidak 
+            'totaldtks_tidak' => $dtksya_tidak+$dtkstidak_tidak,
+            
         ];
         return $hasil[] = [
             'totaldata' => $totaldata,
@@ -121,173 +109,6 @@ class BansosController extends Controller
         $cekdata = PenerimaanBansos::count();
         if ($cekdata > 0) {
             $hasil = $this->rumusnaivebayes();
-            
-            // cadangan jika dibutuhkan untuk ditampilkan
-            // $penerimaanbansos = PenerimaanBansos::all();
-            // foreach($penerimaanbansos as $pb){
-            //     ######################################################################################################################################
-            //     // rumus perhitungan tidak
-            //     switch (true) {
-            //         case $pb->penghasilan_ortu < 1000000:
-            //             $nilaipot_ya = $hasil['probabilitas']['penghasilanortu_kurang_ya']/$hasil['probabilitas']['totalpenghasilanortu_ya'];
-            //             break;
-            //         case $pb->penghasilan_ortu == 1000000:
-            //             $nilaipot_ya = $hasil['probabilitas']['penghasilanortu_samadengan_ya']/$hasil['probabilitas']['totalpenghasilanortu_ya'];
-            //             break;
-            //         case $pb->penghasilan_ortu > 1000000:
-            //             $nilaipot_ya = $hasil['probabilitas']['penghasilanortu_lebih_ya']/$hasil['probabilitas']['totalpenghasilanortu_ya'];
-            //             break;
-                    
-            //         default:
-            //             # code...
-            //             break;
-            //     }
-                
-            //     switch (true) {
-            //         case $pb->usia > 0 || $pb->usia <= 10:
-            //             $nilaiusia_ya = $hasil['probabilitas']['usiasatusdsepuluh_ya']/$hasil['probabilitas']['totalusia_ya'];
-            //             break;
-            //         case $pb->usia > 10 || $pb->usia <= 20:
-            //             $nilaiusia_ya = $hasil['probabilitas']['usiasebelassdduapuluh_ya']/$hasil['probabilitas']['totalusia_ya'];
-            //             break;
-            //         case $pb->usia > 20 || $pb->usia <= 30:
-            //             $nilaiusia_ya = $hasil['probabilitas']['usiaduasatusdtigapuluh_ya']/$hasil['probabilitas']['totalusia_ya'];
-            //             break;
-                    
-            //         default:
-            //             # code...
-            //             break;
-            //     }
-
-            //     switch (true) {
-            //         case $pb->status == "Yatim":
-            //             $nilaistatus_ya = $hasil['probabilitas']['statusyatim_ya']/$hasil['probabilitas']['totalstatus_ya'];
-            //             break;
-            //         case $pb->status == "Piatu":
-            //             $nilaistatus_ya = $hasil['probabilitas']['statuspiatu_ya']/$hasil['probabilitas']['totalstatus_ya'];
-            //             break;
-            //         case $pb->status == "Yatim Piatu":
-            //             $nilaistatus_ya = $hasil['probabilitas']['statusyatimpiatu_ya']/$hasil['probabilitas']['totalstatus_ya'];
-            //             break;
-                    
-            //         default:
-            //             # code...
-            //             break;
-            //     }
-                
-            //     switch (true) {
-            //         case $pb->kia == "ya":
-            //             $nilaikia_ya = $hasil['probabilitas']['kiaada_ya']/$hasil['probabilitas']['totalkia_ya'];
-            //             break;
-            //         case $pb->kia == "tidak":
-            //             $nilaikia_ya = $hasil['probabilitas']['kiatidak_ya']/$hasil['probabilitas']['totalkia_ya'];
-            //             break;
-                    
-            //         default:
-            //             # code...
-            //             break;
-            //     }
-                
-            //     switch (true) {
-            //         case $pb->alamat == "Batang":
-            //             $nilaialamat_ya = $hasil['probabilitas']['alamatbtg_ya']/$hasil['probabilitas']['totalalamat_ya'];
-            //             break;
-            //         case $pb->alamat !== "Batang":
-            //             $nilaialamat_ya = $hasil['probabilitas']['alamatbukanbtg_ya']/$hasil['probabilitas']['totalalamat_ya'];
-            //             break;
-                    
-            //         default:
-            //             # code...
-            //             break;
-            //     }
-
-            //     ######################################################################################################################################
-            //     // rumus perhitungan tidak
-
-            //     switch (true) {
-            //         case $pb->penghasilan_ortu < 1000000:
-            //             $nilaipot_tidak = $hasil['probabilitas']['penghasilanortu_kurang_tidak']/$hasil['probabilitas']['totalpenghasilanortu_tidak'];
-            //             break;
-            //         case $pb->penghasilan_ortu == 1000000:
-            //             $nilaipot_tidak = $hasil['probabilitas']['penghasilanortu_samadengan_tidak']/$hasil['probabilitas']['totalpenghasilanortu_tidak'];
-            //             break;
-            //         case $pb->penghasilan_ortu > 1000000:
-            //             $nilaipot_tidak = $hasil['probabilitas']['penghasilanortu_lebih_tidak']/$hasil['probabilitas']['totalpenghasilanortu_tidak'];
-            //             break;
-                    
-            //         default:
-            //             # code...
-            //             break;
-            //     }
-                
-            //     switch (true) {
-            //         case $pb->usia > 0 || $pb->usia <= 10:
-            //             $nilaiusia_tidak = $hasil['probabilitas']['usiasatusdsepuluh_tidak']/$hasil['probabilitas']['totalusia_tidak'];
-            //             break;
-            //         case $pb->usia > 10 || $pb->usia <= 20:
-            //             $nilaiusia_tidak = $hasil['probabilitas']['usiasebelassdduapuluh_tidak']/$hasil['probabilitas']['totalusia_tidak'];
-            //             break;
-            //         case $pb->usia > 20 || $pb->usia <= 30:
-            //             $nilaiusia_tidak = $hasil['probabilitas']['usiaduasatusdtigapuluh_tidak']/$hasil['probabilitas']['totalusia_tidak'];
-            //             break;
-                    
-            //         default:
-            //             # code...
-            //             break;
-            //     }
-
-            //     switch (true) {
-            //         case $pb->status == "Yatim":
-            //             $nilaistatus_tidak = $hasil['probabilitas']['statusyatim_tidak']/$hasil['probabilitas']['totalstatus_tidak'];
-            //             break;
-            //         case $pb->status == "Piatu":
-            //             $nilaistatus_tidak = $hasil['probabilitas']['statuspiatu_tidak']/$hasil['probabilitas']['totalstatus_tidak'];
-            //             break;
-            //         case $pb->status == "Yatim Piatu":
-            //             $nilaistatus_tidak = $hasil['probabilitas']['statusyatimpiatu_tidak']/$hasil['probabilitas']['totalstatus_tidak'];
-            //             break;
-                    
-            //         default:
-            //             # code...
-            //             break;
-            //     }
-                
-            //     switch (true) {
-            //         case $pb->kia == "ya":
-            //             $nilaikia_tidak = $hasil['probabilitas']['kiaada_tidak']/$hasil['probabilitas']['totalkia_tidak'];
-            //             break;
-            //         case $pb->kia == "tidak":
-            //             $nilaikia_tidak = $hasil['probabilitas']['kiatidak_tidak']/$hasil['probabilitas']['totalkia_tidak'];
-            //             break;
-                    
-            //         default:
-            //             # code...
-            //             break;
-            //     }
-                
-            //     switch (true) {
-            //         case $pb->alamat == "Batang":
-            //             $nilaialamat_tidak = $hasil['probabilitas']['alamatbtg_tidak']/$hasil['probabilitas']['totalalamat_tidak'];
-            //             break;
-            //         case $pb->alamat !== "Batang":
-            //             $nilaialamat_tidak = $hasil['probabilitas']['alamatbukanbtg_tidak']/$hasil['probabilitas']['totalalamat_tidak'];
-            //             break;
-                    
-            //         default:
-            //             # code...
-            //             break;
-            //     }
-
-            //     $hasilya = $hasil['totalya']*$nilaipot_ya*$nilaiusia_ya*$nilaistatus_ya*$nilaialamat_ya; //masukan rumusnya disini
-            //     $hasiltidak = $hasil['totaltidak']*$nilaipot_tidak*$nilaiusia_tidak*$nilaistatus_tidak*$nilaialamat_tidak; //masukan rumusnya disini
-
-            //     $masukanrumus[] = [
-            //         'penduduk' => $pb->penduduk_id,
-            //         'ya' => $hasilya,
-            //         'tidak' => $hasiltidak,
-            //         'hasil' =>  'hasil' //if else disini
-            //     ];
-            // }
 
             return view('cek_status_penerima.index', [
                 'title' => 'Cek status Penerima',
@@ -302,21 +123,16 @@ class BansosController extends Controller
     }
 
     public function json(){
-        $columns = ['id', 'nama', 'nik', 'alamat_lengkap', 'tanggal_lahir', 'jekel', 'nama_desa_kelurahan' ];
+        $columns = ['id', 'nama', 'nik', 'alamat_lengkap', 'tanggal_lahir', 'jenis_kelamin' ];
         $orderBy = $columns[request()->input("order.0.column")];
-        if (auth()->user()->role == 1) {
-            $data = PenerimaanBansos::with('penduduk')->select('*');
-        }else{
-            $data = PenerimaanBansos::with('penduduk')->select('*')->where('user_id', auth()->user()->id);
-        }
+        $data = PenerimaanBansos::with('penduduk')->select('*');
 
         if(request()->input("search.value")){
             $data = $data->where(function($query){
                 $query->whereRaw('nama like ? ', ['%'.request()->input("search.value").'%'])
                 ->orWhereRaw('nik like ? ', ['%'.request()->input("search.value").'%'])
                 ->orWhereRaw('alamat_lengkap like ? ', ['%'.request()->input("search.value").'%'])
-                ->orWhereRaw('tanggal_lahir like ? ', ['%'.request()->input("search.value").'%'])
-                ->orWhereRaw('nama_desa_kelurahan like ? ', ['%'.request()->input("search.value").'%']);
+                ->orWhereRaw('tanggal_lahir like ? ', ['%'.request()->input("search.value").'%']);
             });
         }
 
@@ -332,10 +148,9 @@ class BansosController extends Controller
     }
 
     public function edit($id){
-        $penerima_bantuan = PenerimaanBansos::with('penduduk')->where('penduduk_id', $id)->first();
+        $penerima_bantuan = PenerimaanBansos::with('penduduk')->where('penduduk_nik', $id)->first();
         return view('penerima_bantuan.edit', [
             'title' => "Penerima Bantuan",
-            'dskl' =>DesaKelurahan::select('id', 'kec_id', 'nama_desakelurahan')->with('kecamatan')->get(),
             'data' => $penerima_bantuan,
         ]);
     }
@@ -350,37 +165,15 @@ class BansosController extends Controller
         ######################################################################################################################################
         // rumus perhitungan ya
         
-        if ($pb->penghasilan_ortu) {
-            # code...
-        } else {
-            # code...
-        }
-        
         switch (true) {
-            case $pb->penghasilan_ortu < 1000000:
-                $nilaipot_ya = $hasil['probabilitas']['penghasilanortu_kurang_ya']/$hasil['probabilitas']['totalpenghasilanortu_ya'];
+            case $pb->penghasilan < 1000000:
+                $nilaipot_ya = $hasil['probabilitas']['penghasilan_kurang_ya']/$hasil['probabilitas']['totalpenghasilan_ya'];
                 break;
-            case $pb->penghasilan_ortu == 1000000:
-                $nilaipot_ya = $hasil['probabilitas']['penghasilanortu_samadengan_ya']/$hasil['probabilitas']['totalpenghasilanortu_ya'];
+            case $pb->penghasilan == 1000000:
+                $nilaipot_ya = $hasil['probabilitas']['penghasilan_samadengan_ya']/$hasil['probabilitas']['totalpenghasilan_ya'];
                 break;
-            case $pb->penghasilan_ortu > 1000000:
-                $nilaipot_ya = $hasil['probabilitas']['penghasilanortu_lebih_ya']/$hasil['probabilitas']['totalpenghasilanortu_ya'];
-                break;
-            
-            default:
-                # code...
-                break;
-        }
-        
-        switch (true) {
-            case $pb->usia > 0 || $pb->usia <= 10:
-                $nilaiusia_ya = $hasil['probabilitas']['usiasatusdsepuluh_ya']/$hasil['probabilitas']['totalusia_ya'];
-                break;
-            case $pb->usia > 10 || $pb->usia <= 20:
-                $nilaiusia_ya = $hasil['probabilitas']['usiasebelassdduapuluh_ya']/$hasil['probabilitas']['totalusia_ya'];
-                break;
-            case $pb->usia > 20 || $pb->usia <= 30:
-                $nilaiusia_ya = $hasil['probabilitas']['usiaduasatusdtigapuluh_ya']/$hasil['probabilitas']['totalusia_ya'];
+            case $pb->penghasilan > 1000000:
+                $nilaipot_ya = $hasil['probabilitas']['penghasilan_lebih_ya']/$hasil['probabilitas']['totalpenghasilan_ya'];
                 break;
             
             default:
@@ -389,27 +182,14 @@ class BansosController extends Controller
         }
 
         switch (true) {
-            case $pb->status == "Yatim":
-                $nilaistatus_ya = $hasil['probabilitas']['statusyatim_ya']/$hasil['probabilitas']['totalstatus_ya'];
+            case $pb->status == "Disabilitas":
+                $nilaistatus_ya = $hasil['probabilitas']['statusdisabilitas_ya']/$hasil['probabilitas']['totalstatus_ya'];
                 break;
-            case $pb->status == "Piatu":
-                $nilaistatus_ya = $hasil['probabilitas']['statuspiatu_ya']/$hasil['probabilitas']['totalstatus_ya'];
+            case $pb->status == "Lansia":
+                $nilaistatus_ya = $hasil['probabilitas']['statuslansia_ya']/$hasil['probabilitas']['totalstatus_ya'];
                 break;
-            case $pb->status == "Yatim Piatu":
-                $nilaistatus_ya = $hasil['probabilitas']['statusyatimpiatu_ya']/$hasil['probabilitas']['totalstatus_ya'];
-                break;
-            
-            default:
-                # code...
-                break;
-        }
-        
-        switch (true) {
-            case $pb->kia == "ya":
-                $nilaikia_ya = $hasil['probabilitas']['kiaada_ya']/$hasil['probabilitas']['totalkia_ya'];
-                break;
-            case $pb->kia == "tidak":
-                $nilaikia_ya = $hasil['probabilitas']['kiatidak_ya']/$hasil['probabilitas']['totalkia_ya'];
+            case $pb->status == "Ibu Hamil":
+                $nilaistatus_ya = $hasil['probabilitas']['statusibuhamil_ya']/$hasil['probabilitas']['totalstatus_ya'];
                 break;
             
             default:
@@ -418,46 +198,57 @@ class BansosController extends Controller
         }
         
         switch (true) {
-            case $pb->alamat == "Batang":
-                $nilaialamat_ya = $hasil['probabilitas']['alamatbtg_ya']/$hasil['probabilitas']['totalalamat_ya'];
+            case $pb->polri_asn == "Ya":
+                $nilaipolri_asn_ya = $hasil['probabilitas']['polriasnya_ya']/$hasil['probabilitas']['totalpolriasn_ya'];
                 break;
-            case $pb->alamat !== "Batang":
-                $nilaialamat_ya = $hasil['probabilitas']['alamatbukanbtg_ya']/$hasil['probabilitas']['totalalamat_ya'];
+            case $pb->polri_asn == "Tidak":
+                $nilaipolri_asn_ya = $hasil['probabilitas']['polriasntidak_ya']/$hasil['probabilitas']['totalpolriasn_ya'];
                 break;
             
             default:
                 # code...
                 break;
         }
+        
+        switch (true) {
+            case $pb->pbl == "Penerima":
+                $nilaipbl_ya = $hasil['probabilitas']['pblya_ya']/$hasil['probabilitas']['totalpbl_ya'];
+                break;
+            case $pb->pbl == "Bukan":
+                $nilaipbl_ya = $hasil['probabilitas']['pbltidak_ya']/$hasil['probabilitas']['totalpbl_ya'];
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+        
+        switch (true) {
+            case $pb->dtks == "Belum":
+                $nilaidtks_ya = $hasil['probabilitas']['dtksya_ya']/$hasil['probabilitas']['totaldtks_ya'];
+                break;
+            case $pb->dtks == "Sudah":
+                $nilaidtks_ya = $hasil['probabilitas']['dtkstidak_ya']/$hasil['probabilitas']['totaldtks_ya'];
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+        
 
         ######################################################################################################################################
         // rumus perhitungan tidak
 
         switch (true) {
-            case $pb->penghasilan_ortu < 1000000:
-                $nilaipot_tidak = $hasil['probabilitas']['penghasilanortu_kurang_tidak']/$hasil['probabilitas']['totalpenghasilanortu_tidak'];
+            case $pb->penghasilan < 1000000:
+                $nilaipot_tidak = $hasil['probabilitas']['penghasilan_kurang_tidak']/$hasil['probabilitas']['totalpenghasilan_tidak'];
                 break;
-            case $pb->penghasilan_ortu == 1000000:
-                $nilaipot_tidak = $hasil['probabilitas']['penghasilanortu_samadengan_tidak']/$hasil['probabilitas']['totalpenghasilanortu_tidak'];
+            case $pb->penghasilan == 1000000:
+                $nilaipot_tidak = $hasil['probabilitas']['penghasilan_samadengan_tidak']/$hasil['probabilitas']['totalpenghasilan_tidak'];
                 break;
-            case $pb->penghasilan_ortu > 1000000:
-                $nilaipot_tidak = $hasil['probabilitas']['penghasilanortu_lebih_tidak']/$hasil['probabilitas']['totalpenghasilanortu_tidak'];
-                break;
-            
-            default:
-                # code...
-                break;
-        }
-        
-        switch (true) {
-            case $pb->usia > 0 || $pb->usia <= 10:
-                $nilaiusia_tidak = $hasil['probabilitas']['usiasatusdsepuluh_tidak']/$hasil['probabilitas']['totalusia_tidak'];
-                break;
-            case $pb->usia > 10 || $pb->usia <= 20:
-                $nilaiusia_tidak = $hasil['probabilitas']['usiasebelassdduapuluh_tidak']/$hasil['probabilitas']['totalusia_tidak'];
-                break;
-            case $pb->usia > 20 || $pb->usia <= 30:
-                $nilaiusia_tidak = $hasil['probabilitas']['usiaduasatusdtigapuluh_tidak']/$hasil['probabilitas']['totalusia_tidak'];
+            case $pb->penghasilan > 1000000:
+                $nilaipot_tidak = $hasil['probabilitas']['penghasilan_lebih_tidak']/$hasil['probabilitas']['totalpenghasilan_tidak'];
                 break;
             
             default:
@@ -466,27 +257,14 @@ class BansosController extends Controller
         }
 
         switch (true) {
-            case $pb->status == "Yatim":
-                $nilaistatus_tidak = $hasil['probabilitas']['statusyatim_tidak']/$hasil['probabilitas']['totalstatus_tidak'];
+            case $pb->status == "Disabilitas":
+                $nilaistatus_tidak = $hasil['probabilitas']['statusdisabilitas_tidak']/$hasil['probabilitas']['totalstatus_tidak'];
                 break;
-            case $pb->status == "Piatu":
-                $nilaistatus_tidak = $hasil['probabilitas']['statuspiatu_tidak']/$hasil['probabilitas']['totalstatus_tidak'];
+            case $pb->status == "Lansia":
+                $nilaistatus_tidak = $hasil['probabilitas']['statuslansia_tidak']/$hasil['probabilitas']['totalstatus_tidak'];
                 break;
-            case $pb->status == "Yatim Piatu":
-                $nilaistatus_tidak = $hasil['probabilitas']['statusyatimpiatu_tidak']/$hasil['probabilitas']['totalstatus_tidak'];
-                break;
-            
-            default:
-                # code...
-                break;
-        }
-        
-        switch (true) {
-            case $pb->kia == "ya":
-                $nilaikia_tidak = $hasil['probabilitas']['kiaada_tidak']/$hasil['probabilitas']['totalkia_tidak'];
-                break;
-            case $pb->kia == "tidak":
-                $nilaikia_tidak = $hasil['probabilitas']['kiatidak_tidak']/$hasil['probabilitas']['totalkia_tidak'];
+            case $pb->status == "Ibu Hamil":
+                $nilaistatus_tidak = $hasil['probabilitas']['statusibuhamil_tidak']/$hasil['probabilitas']['totalstatus_tidak'];
                 break;
             
             default:
@@ -495,11 +273,37 @@ class BansosController extends Controller
         }
         
         switch (true) {
-            case $pb->alamat == "Batang":
-                $nilaialamat_tidak = $hasil['probabilitas']['alamatbtg_tidak']/$hasil['probabilitas']['totalalamat_tidak'];
+            case $pb->polri_asn == "Ya":
+                $nilaipolri_asn_tidak = $hasil['probabilitas']['polriasnya_tidak']/$hasil['probabilitas']['totalpolriasn_tidak'];
                 break;
-            case $pb->alamat !== "Batang":
-                $nilaialamat_tidak = $hasil['probabilitas']['alamatbukanbtg_tidak']/$hasil['probabilitas']['totalalamat_tidak'];
+            case $pb->polri_asn == "Tidak":
+                $nilaipolri_asn_tidak = $hasil['probabilitas']['polriasntidak_tidak']/$hasil['probabilitas']['totalpolriasn_tidak'];
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+        
+        switch (true) {
+            case $pb->pbl == "Penerima":
+                $nilaipbl_tidak = $hasil['probabilitas']['pblya_tidak']/$hasil['probabilitas']['totalpbl_tidak'];
+                break;
+            case $pb->pbl == "Bukan":
+                $nilaipbl_tidak = $hasil['probabilitas']['pbltidak_tidak']/$hasil['probabilitas']['totalpbl_tidak'];
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+        
+        switch (true) {
+            case $pb->dtks == "Belum":
+                $nilaidtks_tidak = $hasil['probabilitas']['dtksya_tidak']/$hasil['probabilitas']['totaldtks_tidak'];
+                break;
+            case $pb->dtks == "Sudah":
+                $nilaidtks_tidak = $hasil['probabilitas']['dtkstidak_tidak']/$hasil['probabilitas']['totaldtks_tidak'];
                 break;
             
             default:
@@ -507,10 +311,13 @@ class BansosController extends Controller
                 break;
         }
 
-        $hasilya = $hasil['totalya']*$nilaipot_ya*$nilaiusia_ya*$nilaistatus_ya*$nilaialamat_ya; //masukan rumusnya disini
-        $hasiltidak = $hasil['totaltidak']*$nilaipot_tidak*$nilaiusia_tidak*$nilaistatus_tidak*$nilaialamat_tidak; //masukan rumusnya disini
+
+
+
+        $hasilya = $hasil['totalya']*$nilaipot_ya*$nilaistatus_ya*$nilaipolri_asn_ya*$nilaipbl_ya*$nilaidtks_ya; //masukan rumusnya disini
+        $hasiltidak = $hasil['totaltidak']*$nilaipot_tidak*$nilaistatus_tidak*$nilaipolri_asn_tidak*$nilaipbl_tidak*$nilaidtks_tidak; //masukan rumusnya disini
         $masukanrumus[] = [
-            'penduduk' => $pb->penduduk_id,
+            'penduduk' => $pb->penduduk_nik,
             'ya' => $hasilya,
             'tidak' => $hasiltidak,
             'hasil' =>  $hasilya > $hasiltidak ? "DITERIMA" : "TIDAK DITERIMA"
@@ -524,18 +331,18 @@ class BansosController extends Controller
 
     public function update(Request $request, $id){
         $bansos = PenerimaanBansos::findOrFail($id);
-        $bansos->penghasilan_ortu = preg_replace('/[^0-9]/', '', $request->penghasilan_ortu);
+        $bansos->penghasilan = preg_replace('/[^0-9]/', '', $request->penghasilan);
         $bansos->status = $request->status;
-        // $bansos->kia = $request->kia == null ? 'tidak' : 'ya';
-        // $bansos->alamat = $request->alamat;
+        $bansos->polri_asn = $request->polri_asn;
+        $bansos->pbl = $request->pbl;
+        $bansos->dtks = $request->dtks;
         $bansos->update();
 
-        $penduduk = Penduduk::findOrFail($bansos->penduduk_id);
+        $penduduk = Penduduk::findOrFail($bansos->penduduk_nik);
         $penduduk->nama = $request->nama;
-        $penduduk->nik = $request->nik;
         $penduduk->alamat_lengkap = $request->alamat_lengkap;
         $penduduk->tanggal_lahir = $request->tanggal_lahir;
-        $penduduk->jekel = $request->jekel;
+        $penduduk->jenis_kelamin = $request->jenis_kelamin;
         $penduduk->desa_kelurahan_id = $request->nama_desa_kelurahan;
         $penduduk->update();
         return redirect('/pb');

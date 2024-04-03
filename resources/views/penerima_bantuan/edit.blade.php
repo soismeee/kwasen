@@ -27,29 +27,20 @@
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label>NIK</label>
-                                <input type="text" class="form-control" name="nik" id="nik" placeholder="Masukan Nomor induk penduduk" value="{{ $data->penduduk->nik }}" maxlength="16" onkeypress="return hanyaAngka(event)">
+                                <input type="text" class="form-control" name="nik" id="nik" placeholder="Masukan Nomor induk penduduk" value="{{ $data->penduduk->nik }}" readonly >
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-4 mb-3">
+                            <div class="col-lg-6 mb-3">
                                 <label>Tanggal Lahir</label>
                                 <input type="date" class="form-control" name="tanggal_lahir" id="tanggal_lahir" placeholder="Pilih tanggal lahir" value="{{ $data->penduduk->tanggal_lahir }}">
                             </div>
-                            <div class="col-lg-4 mb-3">
+                            <div class="col-lg-6 mb-3">
                                 <label>Jenis Kelamin</label>
                                 <select class="form-control" name="jekel" id="jekel">
                                     <option selected disabled>Pilih jenis kelamin</option>
-                                    <option value="Laki-laki" {{ $data->penduduk->jekel == "Laki-laki" ? 'selected' : '' }}>Laki-laki</option>
-                                    <option value="Perempuan" {{ $data->penduduk->jekel == "Perempuan" ? 'selected' : '' }}>Perempuan</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-4 mb-3">
-                                <label>Desa/Kelurahan</label>
-                                <select class="form-control" name="nama_desa_kelurahan" id="nama_desa_kelurahan">
-                                    <option selected disabled>Pilih desa/kelurahan</option>
-                                    @foreach ($dskl as $item)
-                                        <option value="{{ $item->id }}" {{ $item->id ==  $data->penduduk->desa_kelurahan_id ? 'selected' : ''}}>{{ $item->nama_desakelurahan }}</option>
-                                    @endforeach
+                                    <option value="L" {{ $data->penduduk->jenis_kelamin == "L" ? 'selected' : '' }}>Laki-laki</option>
+                                    <option value="P" {{ $data->penduduk->jenis_kelamin == "P" ? 'selected' : '' }}>Perempuan</option>
                                 </select>
                             </div>
                         </div>
@@ -64,15 +55,39 @@
                         <div class="row">
                             <div class="col-lg-6 mb-3">
                                 <label>Penghasilan orang tua / wali</label>
-                                <input type="text" class="form-control" name="penghasilan_ortu" id="penghasilan_ortu" value="Rp. {{ number_format($data->penghasilan_ortu,0,',','.') }}" placeholder="Masukan penghasilan">
+                                <input type="text" class="form-control" name="penghasilan" id="penghasilan" value="Rp. {{ number_format($data->penghasilan,0,',','.') }}" placeholder="Masukan penghasilan">
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label>Status</label>
                                 <select class="form-control" name="status" id="status">
                                     <option selected disabled>Pilih status</option>
-                                    <option value="Yatim" {{ $data->status == "Yatim" ? 'selected' : '' }}>Yatim</option>
-                                    <option value="Piatu" {{ $data->status == "Piatu" ? 'selected' : '' }}>Piatu</option>
-                                    <option value="Yatim Piatu" {{ $data->status == "Yatim Piatu" ? 'selected' : '' }}>Yatim Piatu</option>
+                                    <option value="Disabilitas" {{ $data->status == "Disabilitas" ? 'selected' : '' }}>Disabilitas</option>
+                                    <option value="Lansia" {{ $data->status == "Lansia" ? 'selected' : '' }}>Lansia</option>
+                                    <option value="Ibu Hamil" {{ $data->status == "Ibu Hamil" ? 'selected' : '' }}>Ibu Hamil</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-4 mb-3">
+                                <label>Anggota Polri/ASN</label>
+                                <select name="polri_asn" id="polri_asn" class="form-control">
+                                    <option disabled selected>Pilih Status</option>
+                                    <option value="Ya" {{ $data->polri_asn == "Ya" ? 'selected' : '' }}>Ya</option>
+                                    <option value="Tidak" {{ $data->polri_asn == "Tidak" ? 'selected' : '' }}>Tidak</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-4 mb-3">
+                                <label>Penerima Bansos Lain</label>
+                                <select name="pbl" id="pbl" class="form-control">
+                                    <option disabled selected>Pilih Status</option>
+                                    <option value="Penerima" {{ $data->pbl == "Penerima" ? 'selected' : '' }}>Penerima</option>
+                                    <option value="Bukan" {{ $data->pbl == "Bukan" ? 'selected' : '' }}>Bukan</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-4 mb-3">
+                                <label>DTKS</label>
+                                <select name="dtks" id="dtks" class="form-control">
+                                    <option disabled selected>Pilih Status</option>
+                                    <option value="Belum" {{ $data->dtks == "Belum" ? 'selected' : '' }}>Belum</option>
+                                    <option value="Sudah" {{ $data->dtks == "Sudah" ? 'selected' : '' }}>Sudah</option>
                                 </select>
                             </div>
                             <div class="col-lg-12">
@@ -91,18 +106,10 @@
 @endsection
 @push('js')
     <script>
-    let penghasilan_ortu = document.getElementById("penghasilan_ortu");
-    penghasilan_ortu.addEventListener("keyup", function(e) {
-        penghasilan_ortu.value = convertRupiah(this.value, "Rp. ");
+    let penghasilan = document.getElementById("penghasilan");
+    penghasilan.addEventListener("keyup", function(e) {
+        penghasilan.value = convertRupiah(this.value, "Rp. ");
     });
-
-    function hanyaAngka(evt) {
-    var charCode = (evt.which) ? evt.which : event.keyCode
-    if (charCode > 31 && (charCode < 48 || charCode > 57))
-
-        return false;
-    return true;
-    }
 
     function convertRupiah(angka, prefix) {
         var number_string = angka.replace(/[^,\d]/g, "").toString(),
