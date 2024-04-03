@@ -15,23 +15,16 @@ use Illuminate\Support\Facades\Hash;
 class HomeController extends Controller
 {
     public function index(){
-        if (auth()->user()->role == 1) {
-            return view('home.dinas.index', [
-                'title' => 'Dashboard Dinas',
-                'penerima_bantuan' => PenerimaanBansos::get()->count(),
-                'penduduk' => Penduduk::get()->count(),
-            ]);
-        } else {
-            return view('home.desa_kelurahan.index', [
-                'title' => 'Dashboard User',
-            ]);
-        }
+        return view('home.index', [
+            'title' => 'Dashboard Utama',
+            'penerima_bantuan' => PenerimaanBansos::get()->count(),
+            'penduduk' => Penduduk::get()->count(),
+        ]);
     }
 
     public function laporan(){
         return view('laporan.index', [
             'title' => 'laporan',
-            'dskl' => DataDesaKelurahan::all()
         ]);
     }
 

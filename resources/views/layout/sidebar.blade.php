@@ -16,34 +16,34 @@
                     <span>Utama</span>
                 </a>
             </li>
-            @can('Dinas')
             
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('usr.index') }}">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>Kelola User</span>
-                </a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('periode.index') }}">
                     <i class="fas fa-fw fa-layer-group"></i>
                     <span>Periode</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url('/wilayah') }}">
-                    <i class="fas fa-fw fa-map"></i>
-                    <span>Wilayah</span>
-                </a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('kriteria.index') }}">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Kriteria</span>
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('pengajuan') }}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Pengajuan PKH</span>
+                </a>
+            </li>      
+            
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('cek') }}">
+                    <i class="fas fa-fw fa-plus"></i>
+                    <span>Cek status penerima</span>
                 </a>
             </li>
 
@@ -61,24 +61,6 @@
                 </a>
             </li>
 
-            @endcan
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            @can('Desakelurahan')
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('pengajuan') }}">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Pengajuan YAPI</span>
-                </a>
-            </li>            
-            @endcan
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('cek') }}">
-                    <i class="fas fa-fw fa-plus"></i>
-                    <span>Cek status penerima</span>
-                </a>
-            </li>
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
