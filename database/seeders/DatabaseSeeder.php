@@ -2,12 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\DesaKelurahan;
-use App\Models\Kecamatan;
 use App\Models\Kriteria;
 use App\Models\Periode;
 use App\Models\User;
-use App\Models\UserDesaKelurahan;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
