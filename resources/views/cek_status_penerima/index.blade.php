@@ -173,6 +173,7 @@
                     "render": function(data, type, row, meta){
                     return `
                         <a href="{{ url('spb') }}/`+row.id+`" class="btn btn-sm btn-success mb-2" title="Show data">Status</a>
+                        <a href="{{ url('epb') }}/`+row.penduduk.nik+`/edit" class="btn btn-sm btn-warning edit-pengguna mb-2" title="Edit data" >Edit</a>
                         <form action="{{ url('del_p') }}/`+row.penduduk.id+`" method="post">
                         @method('delete')
                         @csrf
