@@ -343,9 +343,8 @@ class BansosController extends Controller
         $penduduk->alamat_lengkap = $request->alamat_lengkap;
         $penduduk->tanggal_lahir = $request->tanggal_lahir;
         $penduduk->jenis_kelamin = $request->jenis_kelamin;
-        $penduduk->desa_kelurahan_id = $request->nama_desa_kelurahan;
         $penduduk->update();
-        return redirect('/pb');
+        return redirect('/cek');
     }
 
     public function destroy($id)
