@@ -22,10 +22,10 @@ class BansosController extends Controller
     }
 
     public function search(){
-        $pdd = Penduduk::select('id','nama', 'nik', 'alamat_lengkap', 'tanggal_lahir', 'jenis_kelamin')->where('nama', request('cari'))->get();
+        $pdd = Penduduk::select('nik','nama', 'alamat_lengkap', 'tanggal_lahir', 'jenis_kelamin')->where('nama', 'like', '%'. request('cari') . '%')->get();
         
         foreach($pdd as $item){
-            $id[] = $item->id;
+            $id[] = $item->nik;
         }
         $penduduk = PenerimaanBansos::with('penduduk')->where('penduduk_nik', $id)->get();
         return response()->json(['data' => $penduduk]);
