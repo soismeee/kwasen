@@ -160,7 +160,7 @@
                         <td>`+params.penduduk.nik+`</td>
                         <td>`+hari+`/`+bulan+`/`+tahun+`</td>
                         <td>`+params.penduduk.alamat_lengkap+`</td>
-                        <td>`+params.penduduk.jekel+`</td>
+                        <td>`+params.penduduk.jenis_kelamin+`</td>
                         <td>`+params.validasi+`</td>
                     </tr>`
                     $('table tbody').append(body);

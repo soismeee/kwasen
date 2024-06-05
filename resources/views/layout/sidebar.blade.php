@@ -4,7 +4,7 @@
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
                 <img src="{{ asset('assets/img/logo_pekalongankab.svg') }}" alt="" width="20%">
-                <div class="sidebar-brand-text mx-3">Bansos Yapi</div>
+                <div class="sidebar-brand-text mx-3">Bansos PKH</div>
             </a>
 
             <!-- Divider -->
@@ -47,12 +47,12 @@
                 </a>
             </li>
 
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link" href="{{ route('pb') }}">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Penerima Bantuan</span>
                 </a>
-            </li>
+            </li> --}}
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('lap') }}">

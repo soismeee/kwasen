@@ -37,7 +37,7 @@
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label>Jenis Kelamin</label>
-                                <select class="form-control" name="jekel" id="jekel">
+                                <select class="form-control" name="jenis_kelamin" id="jenis_kelamin">
                                     <option selected disabled>Pilih jenis kelamin</option>
                                     <option value="L" {{ $data->penduduk->jenis_kelamin == "L" ? 'selected' : '' }}>Laki-laki</option>
                                     <option value="P" {{ $data->penduduk->jenis_kelamin == "P" ? 'selected' : '' }}>Perempuan</option>
@@ -54,7 +54,7 @@
                         <h4><strong>Data Bantuan</strong></h4>
                         <div class="row">
                             <div class="col-lg-6 mb-3">
-                                <label>Penghasilan orang tua / wali</label>
+                                <label>Penghasilan</label>
                                 <input type="text" class="form-control" name="penghasilan" id="penghasilan" value="Rp. {{ number_format($data->penghasilan,0,',','.') }}" placeholder="Masukan penghasilan">
                             </div>
                             <div class="col-lg-6 mb-3">
