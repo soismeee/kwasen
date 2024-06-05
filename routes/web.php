@@ -38,18 +38,7 @@ route::resource('/kriteria', KriteriaController::class)->middleware('auth');
 route::get('/dpp/{id}', [PeriodeController::class, 'show'])->middleware('auth');
 route::get('/json_dpp/{id}', [PeriodeController::class, 'getDataPeriode'])->middleware('auth');
 route::get('/cek', [BansosController::class, 'cek'])->name('cek')->middleware('auth');
-route::get('/pb', [
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    ::class, 'PenerimaBantuan'])->name('pb')->middleware('auth');
+route::get('/pb', [BansosController::class, 'PenerimaBantuan'])->name('pb')->middleware('auth');
 route::get('/lap', [HomeController::class, 'laporan'])->name('lap')->middleware('auth');
 route::get('/get_lap', [HomeController::class, 'getLaporan'])->name('get_lap')->middleware('auth');
 route::get('/cetak', [HomeController::class, 'cetakLaporan'])->name('cetak')->middleware('auth');
