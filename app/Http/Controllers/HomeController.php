@@ -16,7 +16,7 @@ class HomeController extends Controller
 {
     public function index(){
         return view('home.index', [
-            'title' => 'Dashboard Utama',
+            'title' => 'Halaman Utama',
             'penerima_bantuan' => PenerimaanBansos::get()->count(),
             'penduduk' => Penduduk::get()->count(),
         ]);
