@@ -13,12 +13,12 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-4 mb-3">
+        <div class="col-lg-12 mb-3">
             <div class="card">
                 <div class="card-body">
                     <h4>Penghasilan</h4>
                     <hr />
-                    <h2 class="text-center">{{ number_format($kriteria->penghasilan,0,',','.') }}</h2>
+                    <h5 class="text-center">{{ number_format($kriteria->penghasilan,0,',','.') }}</h5>
                     <hr />
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-md btn-primary" id="k_penghasilan">Ubah data</button>
@@ -26,12 +26,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 mb-3">
+        <div class="col-lg-12 mb-3">
             <div class="card">
                 <div class="card-body">
                     <h4>Status</h4>
                     <hr />
-                    <h2 class="text-center">{{ $kriteria->status }}</h2>
+                    <h5 class="text-center">{{ $kriteria->status }}</h5>
                     <hr />
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-md btn-primary" id="k_status">Ubah data</button>
@@ -39,12 +39,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 mb-3">
+        <div class="col-lg-12 mb-3">
             <div class="card">
                 <div class="card-body">
                     <h4>Polri/ASN</h4>
                     <hr />
-                    <h2 class="text-center">{{ $kriteria->polri_asn }}</h2>
+                    <h5 class="text-center">{{ $kriteria->polri_asn }}</h5>
                     <hr />
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-md btn-primary" id="k_polri_asn">Ubah data</button>
@@ -52,12 +52,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 mb-3">
+        <div class="col-lg-12 mb-3">
             <div class="card">
                 <div class="card-body">
                     <h4>Penerima Bansos Lain</h4>
                     <hr />
-                    <h2 class="text-center">{{ $kriteria->pbl }}</h2>
+                    <h5 class="text-center">{{ $kriteria->pbl }}</h5>
                     <hr />
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-md btn-primary" id="k_pbl">Ubah data</button>
@@ -65,12 +65,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 mb-3">
+        <div class="col-lg-12 mb-3">
             <div class="card">
                 <div class="card-body">
                     <h4>DTKS</h4>
                     <hr />
-                    <h2 class="text-center">{{ $kriteria->dtks }}</h2>
+                    <h5 class="text-center">{{ $kriteria->dtks }}</h5>
                     <hr />
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-md btn-primary" id="k_dtks">Ubah data</button>

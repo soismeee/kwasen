@@ -100,11 +100,6 @@
                     "render": function(data, type, row, meta){
                     return `
                         <a href="{{ route('periode.index') }}/`+row.id+`/edit" class="btn btn-sm btn-success mb-2" title="Show data">Ubah</a>
-                        <form action="{{ route('periode.index') }}/`+row.id+`" method="post">
-                        @method('delete')
-                        @csrf
-                            <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin hapus data ini?')" title="Hapus data">Hapus</button>
-                        </form>
                         `
                     }
                 },

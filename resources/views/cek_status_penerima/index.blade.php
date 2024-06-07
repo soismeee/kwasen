@@ -174,11 +174,7 @@
                     return `
                         <a href="{{ url('spb') }}/`+row.id+`" class="btn btn-sm btn-success mb-2" title="Show data">Status</a>
                         <a href="{{ url('epb') }}/`+row.penduduk.nik+`/edit" class="btn btn-sm btn-warning edit-pengguna mb-2" title="Edit data" >Edit</a>
-                        <form action="{{ url('del_p') }}/`+row.penduduk.nik+`" method="post">
-                        @method('delete')
-                        @csrf
-                            <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin hapus data ini?')" title="Hapus data">Hapus</button>
-                        </form>
+                        
                         `
                     }
                 },

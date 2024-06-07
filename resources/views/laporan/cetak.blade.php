@@ -21,8 +21,9 @@
             text-align: center;
         }
     </style>
-    <h2 class='tengah'>Laporan Penerimaan bantuan</h2>
+    <h2 class='tengah'>Laporan Penerimaan bantuan sosial PKH</h2>
     <P class='tengah'>Desa Kwasen Kecamatan Kesesi Kabupaten Pekalongan</P>
+    <p class="tengah">Periode : {{ $periode->periode }}</p>
     <table>
         <tr>
             <th width="3%">No</th>
@@ -48,6 +49,13 @@
         </tbody>
     </table>
     <br />
+    Kwasen, {{ date('d/m/Y') }} <br />
+    Lurah Desa Kwasen
+    <br />
+    <br />
+    <br />
+    <br />
+    (...............................)
 </body>
 </html>
 <script>

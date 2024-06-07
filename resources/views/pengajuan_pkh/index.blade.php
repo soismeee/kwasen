@@ -20,21 +20,21 @@
                         <h4><strong>Data Penduduk</strong></h4>
                         <div class="alert alert-danger alert-solid peringatan" role="alert" style="display: none">Maaf, untuk saat ini anda tidak bisa menginput penerima bantuan</div>
                         <div class="row">
-                            <div class="col-lg-6 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>Nama</label>
                                 <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukan nama">
                             </div>
-                            <div class="col-lg-6 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>NIK</label>
                                 <input type="text" class="form-control" name="nik" id="nik" placeholder="Masukan Nomor induk penduduk" maxlength="16" onkeypress="return hanyaAngka(event)">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>Tanggal Lahir</label>
                                 <input type="date" class="form-control" name="tanggal_lahir" id="tanggal_lahir" placeholder="Pilih tanggal lahir">
                             </div>
-                            <div class="col-lg-6 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>Jenis Kelamin</label>
                                 <select class="form-control" name="jenis_kelamin" id="jenis_kelamin">
                                     <option selected disabled>Pilih jenis kelamin</option>
@@ -52,11 +52,11 @@
                         <hr />
                         <h4><strong>Data Bantuan</strong></h4>
                         <div class="row">
-                            <div class="col-lg-6 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>Penghasilan</label>
                                 <input type="text" class="form-control" name="penghasilan" id="penghasilan" placeholder="Masukan penghasilan">
                             </div>
-                            <div class="col-lg-6 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>Status</label>
                                 <select name="status" id="status" class="form-control">
                                     <option disabled selected>Pilih Status</option>
@@ -65,7 +65,7 @@
                                     <option value="Ibu Hamil">Ibu Hamil</option>
                                 </select>
                             </div>
-                            <div class="col-lg-4 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>Anggota Polri/ASN</label>
                                 <select name="polri_asn" id="polri_asn" class="form-control">
                                     <option disabled selected>Pilih Status</option>
@@ -73,7 +73,7 @@
                                     <option value="Tidak">Tidak</option>
                                 </select>
                             </div>
-                            <div class="col-lg-4 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>Penerima Bansos Lain</label>
                                 <select name="pbl" id="pbl" class="form-control">
                                     <option disabled selected>Pilih Status</option>
@@ -81,7 +81,7 @@
                                     <option value="Bukan">Bukan</option>
                                 </select>
                             </div>
-                            <div class="col-lg-4 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>DTKS</label>
                                 <select name="dtks" id="dtks" class="form-control">
                                     <option disabled selected>Pilih Status</option>

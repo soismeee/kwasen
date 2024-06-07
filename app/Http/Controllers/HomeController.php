@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DataDesaKelurahan;
 use App\Models\Penduduk;
 use App\Models\PenerimaanBansos;
+use App\Models\Periode;
 use App\Models\User;
 use App\Models\UserDesaKelurahan;
 use Illuminate\Http\Request;
@@ -41,11 +42,16 @@ class HomeController extends Controller
         $penduduk = PenerimaanBansos::with('penduduk')->select('*');   
         if(request('status' !==null)){
             $penduduk = PenerimaanBansos::with('penduduk')->select('*')->where('validasi', request('status'));   
-
         }
+
+        $periode = Periode::orderBy('created_at', 'desc')->get();
+        $periode_terbaru = $periode['0'];
+
+        // return $periode_terbaru;
         return view('laporan.cetak', [
             'title' => 'Cetak Laporan',
-            'data' => $penduduk->get()
+            'data' => $penduduk->get(),
+            'periode' => $periode_terbaru
         ]);
     }
 
