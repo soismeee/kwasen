@@ -50,7 +50,7 @@
     </table>
     <br />
     Kwasen, {{ date('d/m/Y') }} <br />
-    Lurah Desa Kwasen
+    Kepala Desa Kwasen
     <br />
     <br />
     <br />

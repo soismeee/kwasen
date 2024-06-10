@@ -21,21 +21,21 @@
                     <div class="card-body">
                         <h4><strong>Data Penduduk</strong></h4>
                         <div class="row">
-                            <div class="col-lg-6 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>Nama</label>
                                 <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukan nama" value="{{ $data->penduduk->nama }}">
                             </div>
-                            <div class="col-lg-6 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>NIK</label>
                                 <input type="text" class="form-control" name="nik" id="nik" placeholder="Masukan Nomor induk penduduk" value="{{ $data->penduduk->nik }}" readonly >
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>Tanggal Lahir</label>
                                 <input type="date" class="form-control" name="tanggal_lahir" id="tanggal_lahir" placeholder="Pilih tanggal lahir" value="{{ $data->penduduk->tanggal_lahir }}">
                             </div>
-                            <div class="col-lg-6 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>Jenis Kelamin</label>
                                 <select class="form-control" name="jenis_kelamin" id="jenis_kelamin">
                                     <option selected disabled>Pilih jenis kelamin</option>
@@ -53,11 +53,11 @@
                         <hr />
                         <h4><strong>Data Bantuan</strong></h4>
                         <div class="row">
-                            <div class="col-lg-6 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>Penghasilan</label>
                                 <input type="text" class="form-control" name="penghasilan" id="penghasilan" value="Rp. {{ number_format($data->penghasilan,0,',','.') }}" placeholder="Masukan penghasilan">
                             </div>
-                            <div class="col-lg-6 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>Status</label>
                                 <select class="form-control" name="status" id="status">
                                     <option selected disabled>Pilih status</option>
@@ -66,7 +66,7 @@
                                     <option value="Ibu Hamil" {{ $data->status == "Ibu Hamil" ? 'selected' : '' }}>Ibu Hamil</option>
                                 </select>
                             </div>
-                            <div class="col-lg-4 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>Anggota Polri/ASN</label>
                                 <select name="polri_asn" id="polri_asn" class="form-control">
                                     <option disabled selected>Pilih Status</option>
@@ -74,7 +74,7 @@
                                     <option value="Tidak" {{ $data->polri_asn == "Tidak" ? 'selected' : '' }}>Tidak</option>
                                 </select>
                             </div>
-                            <div class="col-lg-4 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>Penerima Bansos Lain</label>
                                 <select name="pbl" id="pbl" class="form-control">
                                     <option disabled selected>Pilih Status</option>
@@ -82,7 +82,7 @@
                                     <option value="Bukan" {{ $data->pbl == "Bukan" ? 'selected' : '' }}>Bukan</option>
                                 </select>
                             </div>
-                            <div class="col-lg-4 mb-3">
+                            <div class="col-lg-12 mb-3">
                                 <label>DTKS</label>
                                 <select name="dtks" id="dtks" class="form-control">
                                     <option disabled selected>Pilih Status</option>
