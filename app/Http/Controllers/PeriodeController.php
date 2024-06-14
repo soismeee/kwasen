@@ -42,8 +42,10 @@ class PeriodeController extends Controller
 
     public function create()
     {
+        $periode = Periode::orderby('tanggal_akhir', 'desc')->first();
         return view('periode.create', [
-            'title' => 'Create periode'
+            'title' => 'Create periode',
+            'batas_tanggal' => date('Y-m-d', strtotime('+1 days', strtotime($periode->tanggal_akhir)))
         ]);
     }
 

@@ -28,11 +28,11 @@
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label for="">Tanggal mulai</label>
-                                <input type="date" class="form-control @error('tanggal_mulai') is-invalid @enderror" name="tanggal_mulai" id="tanggal_mulai" min="{{ date('Y-m-d') }}" value="{{ old('tanggal_mulai') }}">
+                                <input type="date" class="form-control @error('tanggal_mulai') is-invalid @enderror" name="tanggal_mulai" id="tanggal_mulai" min="{{ date('Y-m-d', strtotime($batas_tanggal)) }}" value="{{ old('tanggal_mulai') }}">
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label for="">Tanggal akhir</label>
-                                <input type="date" class="form-control @error('tanggal_akhir') is-invalid @enderror" name="tanggal_akhir" id="tanggal_akhir" min="{{ date('Y-m-d') }}" value="{{ old('tanggal_akhir') }}">
+                                <input type="date" class="form-control @error('tanggal_akhir') is-invalid @enderror" name="tanggal_akhir" id="tanggal_akhir" min="{{ date('Y-m-d', strtotime($batas_tanggal)) }}" value="{{ old('tanggal_akhir') }}">
                             </div>
                             <div class="col-lg-12  mb-3">
                                 <label for="">Maksimal Penerimaan</label>
