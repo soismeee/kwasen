@@ -13,9 +13,9 @@ use Illuminate\Http\Request;
 class PengajuanPKHController extends Controller
 {
     public function index(){
-        $periode = Periode::orderBy('created_at', 'desc')->get();
+        $periode = Periode::orderBy('created_at', 'desc')->first();
         if ($periode->count() == 0) {return view('home.forbiden', ['title' => 'Forbiden']);}
-        $periode_terbaru = $periode['0'];
+        $periode_terbaru = $periode;
 
 
         // set periode

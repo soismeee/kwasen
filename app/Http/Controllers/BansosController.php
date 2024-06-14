@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\DesaKelurahan;
 use App\Models\Kriteria;
 use App\Models\Penduduk;
 use App\Models\PenerimaanBansos;
-use App\Models\UserDesaKelurahan;
 use Illuminate\Http\Request;
 
 class BansosController extends Controller
@@ -162,17 +160,18 @@ class BansosController extends Controller
         $hasil = $this->rumusnaivebayes();
 
         $pb = PenerimaanBansos::find($id);
+        $kriteria = Kriteria::first();
         ######################################################################################################################################
         // rumus perhitungan ya
         
         switch (true) {
-            case $pb->penghasilan < 1000000:
+            case $pb->penghasilan < $kriteria->penghasilan:
                 $nilaipot_ya = $hasil['probabilitas']['penghasilan_kurang_ya']/$hasil['probabilitas']['totalpenghasilan_ya'];
                 break;
-            case $pb->penghasilan == 1000000:
+            case $pb->penghasilan == $kriteria->penghasilan:
                 $nilaipot_ya = $hasil['probabilitas']['penghasilan_samadengan_ya']/$hasil['probabilitas']['totalpenghasilan_ya'];
                 break;
-            case $pb->penghasilan > 1000000:
+            case $pb->penghasilan > $kriteria->penghasilan:
                 $nilaipot_ya = $hasil['probabilitas']['penghasilan_lebih_ya']/$hasil['probabilitas']['totalpenghasilan_ya'];
                 break;
             
@@ -241,13 +240,13 @@ class BansosController extends Controller
         // rumus perhitungan tidak
 
         switch (true) {
-            case $pb->penghasilan < 1000000:
+            case $pb->penghasilan < $kriteria->penghasilan:
                 $nilaipot_tidak = $hasil['probabilitas']['penghasilan_kurang_tidak']/$hasil['probabilitas']['totalpenghasilan_tidak'];
                 break;
-            case $pb->penghasilan == 1000000:
+            case $pb->penghasilan == $kriteria->penghasilan:
                 $nilaipot_tidak = $hasil['probabilitas']['penghasilan_samadengan_tidak']/$hasil['probabilitas']['totalpenghasilan_tidak'];
                 break;
-            case $pb->penghasilan > 1000000:
+            case $pb->penghasilan > $kriteria->penghasilan:
                 $nilaipot_tidak = $hasil['probabilitas']['penghasilan_lebih_tidak']/$hasil['probabilitas']['totalpenghasilan_tidak'];
                 break;
             
@@ -310,8 +309,6 @@ class BansosController extends Controller
                 # code...
                 break;
         }
-
-
 
 
         $hasilya = $hasil['totalya']*$nilaipot_ya*$nilaistatus_ya*$nilaipolri_asn_ya*$nilaipbl_ya*$nilaidtks_ya; //masukan rumusnya disini
