@@ -24,9 +24,9 @@ class DatabaseSeeder extends Seeder
             'id' => intval((microtime(true) * 10000)),
             'penghasilan' => 500000,
             'status' => "Kosong",
-            'polri_asn' => 'Ya',
-            'pbl' => 'Penerima',
-            'dtks' => 'Belum',
+            'polri_asn' => 'Tidak',
+            'pbl' => 'Bukan',
+            'dtks' => 'Sudah',
         ]);
 
         // membuat periode
