@@ -16,7 +16,7 @@ class HomeController extends Controller
     public function index(){
         return view('home.index', [
             'title' => 'Halaman Utama',
-            'penerima_bantuan' => PenerimaanBansos::get()->count(),
+            'penerima_bantuan' => PenerimaanBansos::where('validasi', 'Ya')->get()->count(),
             'penduduk' => Penduduk::get()->count(),
         ]);
     }
