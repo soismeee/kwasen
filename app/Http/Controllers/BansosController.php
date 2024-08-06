@@ -38,8 +38,8 @@ class BansosController extends Controller
     public function rumusnaivebayes(){
         // probabilitas class
         $totaldata = PenerimaanBansos::count();
-        $totalya = PenerimaanBansos::where('validasi', 'Ya')->count();
-        $totaltidak = PenerimaanBansos::where('validasi', 'Tidak')->count();
+        $totalya = PenerimaanBansos::where('validasi', 'Ya')->orderBy('created_at', 'desc')->limit(50)->count();
+        $totaltidak = PenerimaanBansos::where('validasi', 'Tidak')->orderBy('created_at', 'desc')->limit(50)->count();
 
         // probabilitas kategori
         $kriteria = Kriteria::first();

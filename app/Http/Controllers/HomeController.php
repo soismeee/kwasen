@@ -29,17 +29,20 @@ class HomeController extends Controller
 
     public function getLaporan(){
         try {
-            $penduduk = PenerimaanBansos::with('penduduk')->select('*')->get();   
-            return response()->json(['data' => $penduduk]);
+            $penduduk = PenerimaanBansos::with('penduduk')->select('*');   
+            if (request('status') !== null) {
+                $penduduk->where('validasi', request('status'));
+            }
+            return response()->json(['data' => $penduduk->get()]);
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage]);
         }
     }
 
     public function cetakLaporan(){
-        $penduduk = PenerimaanBansos::with('penduduk')->select('*');   
-        if(request('status' !==null)){
-            $penduduk = PenerimaanBansos::with('penduduk')->select('*')->where('validasi', request('status'));   
+        $penduduk = PenerimaanBansos::with('penduduk')->select('*')->get();
+        if(request('status') !== null){
+            $penduduk = PenerimaanBansos::with('penduduk')->select('*')->where('validasi', request('status'))->get();   
         }
 
         $periode = Periode::orderBy('created_at', 'desc')->get();
@@ -48,7 +51,7 @@ class HomeController extends Controller
         // return $periode_terbaru;
         return view('laporan.cetak', [
             'title' => 'Cetak Laporan',
-            'data' => $penduduk->get(),
+            'data' => $penduduk,
             'periode' => $periode_terbaru
         ]);
     }

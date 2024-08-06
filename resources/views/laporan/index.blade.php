@@ -22,8 +22,8 @@
                     <label>Filter Diterima/tidak</label>
                     <select class="form-control" name="status" id="status">
                         <option value="">Pilih status</option>
-                        <option value="diterima">Diterima</option>
-                        <option value="tidak">Tidak diterima</option>
+                        <option value="Ya">Diterima</option>
+                        <option value="Tidak">Tidak diterima</option>
                     </select>
                 </div>
             </div>
@@ -69,6 +69,8 @@
         $.ajax({
             url: "{{ url('get_lap') }}",
             method: "GET",
+            data: { 'status' : $('#status').val() },
+            dataType: 'json',
             success: function(response){
                 ambildata(response);
             },
@@ -132,6 +134,8 @@
 
     $('#status').on('change', function(e){
         link_cetak();
+        loading();
+        loaddata();
     });
 </script>
 
